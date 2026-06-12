@@ -4,7 +4,7 @@ local TL = Instance.new("TextLabel")
 local B1 = Instance.new("TextButton")
 local B2 = Instance.new("TextButton")
 
-SG.Name = "CustomMenuGUI"
+SG.Name = "CustomMenuGUI_V3"
 SG.Parent = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 SG.ResetOnSpawn = false
 
@@ -12,7 +12,7 @@ MF.Name = "MainFrame"
 MF.Parent = SG
 MF.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 MF.Position = UDim2.new(0.05, 0, 0.3, 0)
-MF.Size = UDim2.new(0, 200, 0, 180)
+MF.Size = UDim2.new(0, 220, 0, 180)
 MF.Active = true
 MF.Draggable = true
 
@@ -21,7 +21,7 @@ TL.Parent = MF
 TL.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 TL.Size = UDim2.new(1, 0, 0, 30)
 TL.Font = Enum.Font.SourceSansBold
-TL.Text = "LOOP MENU"
+TL.Text = "LOOP MENU V3 (1M)"
 TL.TextColor3 = Color3.fromRGB(255, 255, 255)
 TL.TextSize = 16
 
@@ -41,7 +41,7 @@ B2.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 B2.Position = UDim2.new(0.05, 0, 0.55, 0)
 B2.Size = UDim2.new(0.9, 0, 0, 40)
 B2.Font = Enum.Font.SourceSans
-B2.Text = "Start Service: OFF"
+B2.Text = "Spam 1 - 1M: OFF"
 B2.TextColor3 = Color3.fromRGB(255, 255, 255)
 B2.TextSize = 14
 
@@ -49,6 +49,7 @@ local bLoop = false
 local sLoop = false
 local RE = game:GetService("ReplicatedStorage"):WaitForChild("src"):WaitForChild("Modules"):WaitForChild("KnitClient"):WaitForChild("Services"):WaitForChild("BombService"):WaitForChild("RE")
 
+-- Tombol 1: Loop Throw Bomb
 B1.MouseButton1Click:Connect(function()
 	bLoop = not bLoop
 	if bLoop then
@@ -66,19 +67,31 @@ B1.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- Tombol 2: High-Speed Loop 1 sampai 1.000.000
 B2.MouseButton1Click:Connect(function()
 	sLoop = not sLoop
 	if sLoop then
 		B2.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
-		B2.Text = "Start Service: ON"
+		B2.Text = "Spam 1 - 1M: ON"
+		
 		task.spawn(function()
 			while sLoop do
-				RE:WaitForChild("Start"):FireServer(17)
-				task.wait(0.1)
+				for i = 1, 1000000 do
+					if not sLoop then break end
+					
+					RE:WaitForChild("Start"):FireServer(i)
+					
+					-- Anti-Kick / Anti-Lag System:
+					-- Setiap kelipatan 500 angka, script akan jeda sangat singkat (1 frame)
+					if i % 500 == 0 then
+						task.wait() 
+					end
+				end
+				task.wait(1) -- Jeda 1 detik sebelum mengulang dari angka 1 lagi (jika masih ON)
 			end
 		end)
 	else
 		B2.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-		B2.Text = "Start Service: OFF"
+		B2.Text = "Spam 1 - 1M: OFF"
 	end
 end)
